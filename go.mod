@@ -6,8 +6,8 @@ require (
 	github.com/aws/aws-sdk-go-v2 v1.36.3
 	github.com/containerd/cgroups v1.1.0
 	github.com/containerd/nerdctl/v2 v2.0.4
-	github.com/docker/cli v28.0.4+incompatible
-	github.com/docker/docker v28.0.4+incompatible
+	github.com/docker/cli v28.1.1+incompatible
+	github.com/docker/docker v28.1.1+incompatible
 	github.com/docker/go-connections v0.5.0
 	github.com/golang/mock v1.6.0
 	github.com/google/go-licenses v1.6.1-0.20230903011517-706b9c60edd4
@@ -30,7 +30,7 @@ require (
 	golang.org/x/sync v0.13.0
 	golang.org/x/tools v0.32.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8s.io/apimachinery v0.32.3
+	k8s.io/apimachinery v0.32.4
 )
 
 require (
@@ -100,6 +100,7 @@ require (
 	github.com/moby/sys/signal v0.7.1 // indirect
 	github.com/moby/sys/user v0.3.0 // indirect
 	github.com/moby/sys/userns v0.1.0 // indirect
+	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/mr-tron/base58 v1.2.0 // indirect
 	github.com/multiformats/go-base32 v0.1.0 // indirect
 	github.com/multiformats/go-base36 v0.2.0 // indirect
