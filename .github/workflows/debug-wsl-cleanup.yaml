@@ -1,0 +1,59 @@
+name: Debug WSL Cleanup
+
+on:
+  push:
+    branches:
+      - wsl_cleanup_fix  # Modified branch name
+  workflow_dispatch:  # Added manual trigger option
+
+jobs:
+  debug-cleanup:
+    runs-on: windows-latest  # Very important: must be Windows runner!
+    steps:
+      - name: Verify Windows Environment
+        shell: pwsh
+        run: |
+          Write-Host "Debug timestamp: $(Get-Date)"
+          Write-Host "Operating System: $env:OS"
+          Write-Host "Windows Version:"
+          systeminfo | findstr /B /C:"OS Name" /C:"OS Version"
+
+      - name: Download Ubuntu rootfs
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri https://cloud-images.ubuntu.com/minimal/releases/focal/release/ubuntu-20.04-minimal-cloudimg-amd64-root.tar.xz -OutFile $env:TEMP\ubuntu.tar.xz
+
+      - name: Install WSL 2 Kernel Update
+        shell: pwsh
+        run: |
+          $ProgressPreference = 'SilentlyContinue'
+          Invoke-WebRequest -Uri https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi -OutFile "$env:TEMP\wsl_update.msi"
+          Start-Process msiexec.exe -Wait -ArgumentList "/i `"$env:TEMP\wsl_update.msi`" /quiet /norestart"
+
+      - name: Import lima-finch WSL distro (WSL 2)
+        shell: pwsh
+        run: |
+          $rootfs = "$env:TEMP\ubuntu.tar.xz"
+          $importPath = "$env:LOCALAPPDATA\lima-finch"
+          mkdir $importPath
+          wsl --import lima-finch $importPath $rootfs --version 2
+
+      - name: Start lima-finch distro
+        shell: pwsh
+        run: |
+          wsl -d lima-finch -- uname -a
+
+      - name: Check WSL Distributions
+        shell: pwsh
+        run: |
+          Write-Host "Checking WSL version..."
+          wsl -l -v
+          Write-Host "Listing available WSL distributions..."
+          wsl --list --verbose --all
+
+#      - name: Run WSL Cleanup Script
+#        shell: pwsh
+#        run: |
+#          Write-Host "Executing cleanup_wsl.ps1 script..."
+#          ./scripts/cleanup_wsl.ps1
+#          Write-Host "Completed executing cleanup_wsl.ps1 script."
